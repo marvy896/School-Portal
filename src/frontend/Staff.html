@@ -9,10 +9,11 @@
     <link rel="stylesheet" href="index.css" />
   </head>
   <body>
+    <div class="login">
     <header>
       <h1>Staff Registration</h1>
     </header>
-    <form action="/registerStaff" method="post" class="staff">
+    <form action="/registerStaff" method="post" class="regStudents">
       <h3>Staff Registration</h3>
       <label for="finame">First Name:</label>
       <input type="text" id="finame" name="finame" /><br />
@@ -27,7 +28,11 @@
       <br />
       <label htmlFor="password">PassWord</label>
       <input type="password" id="password" name="password" />
-      <input type="submit" /> <br />
+      <button type="submit">Submit</button>
     </form>
+    <div class="next">
+      <button onclick="window.location.href='index.html'">Back</button>
+  </div>
+  </div>
   </body>
 </html>

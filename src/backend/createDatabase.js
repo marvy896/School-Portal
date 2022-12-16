@@ -1,8 +1,7 @@
 import sqlite3 from "sqlite3";
 let sqlite = sqlite3.verbose();
-//var sqlite3 = require("sqlite3").verbose();
-// let db = new sqlite.Database("database.sqlite3");
-let DBSOURCE = "database.sqlite3";
+let DBSOURCE = "database.sqlite3Main";
+
 
 let db = new sqlite.Database(DBSOURCE, (err) => {
   if (err) {
@@ -16,15 +15,18 @@ let db = new sqlite.Database(DBSOURCE, (err) => {
           FirstName Text, 
           LastName Text, 
           Password Text, 
-          Username Text, 
+          Username Text NOT NULL UNIQUE, 
           StateOfOrigin Text, 
           Rank Integer)`,
       (err) => {
         if (err) {
+          console.log(" not Created Staff")
         } else {
+          console.log(" Created Staff")
         }
       }
     );
+   
     db.run(
       `CREATE TABLE Students 
   (StudentsId INTEGER Primary Key AutoIncrement, 
@@ -34,12 +36,15 @@ let db = new sqlite.Database(DBSOURCE, (err) => {
     Age Integer)`,
       (err) => {
         if (err) {
+          console.log("not Created Students")
         } else {
+          console.log("Created Students")
         }
       }
     );
+    console.log("success!")
   }
 });
 
-// db.close();
+ //db.close();
 export default db;

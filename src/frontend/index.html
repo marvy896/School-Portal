@@ -5,30 +5,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>School Portal</title>
-    <script src="/app.js"></script>
+    <script src="./app.js"></script>
     <link rel="stylesheet" href="index.css">
   </head>
   <body>
-<div className="login">
+<div class="login">
     <header>
         <h1>Staff Login</h1></header>
-    <form>
+    <form action="/login" method="post">
       <label htmlFor="Username"> Staff User Name</label>
-      <input type="text" id="Username" name="Username" />
+      <input type="text" id="Username" name="Username" required/>
       <br />
       <label htmlFor="password">PassWord</label>
-      <input type="password" id="password" name="password" />
-      <input type="submit" value="Login" />
+      <input type="password" id="password" name="Password" required/>
+      <button type="submit">Submit</button>
     </form>
-    <form>
-        
-    </form>
+    <section>
     <h3> Don't have an account as a Staff?
         <button onclick="window.location.href='Staff.html'">Register Here</button>
     </h3>
     <h3> Are you a Student?
         <button onclick="window.location.href='students.html'">Register Here</button>
     </h3>
+  </section>
     <div>
 
     </body>

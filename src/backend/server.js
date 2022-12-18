@@ -3,9 +3,19 @@ import path from "path";
 import db from "./createDatabase.js";
 import md5 from "md5";
 import bodyParser from "body-parser"; 
+import multer from "multer";
 
-
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+      cb(null, file.originalname);
+  },
+});
 // Middleware
+const upload = multer({ storage: storage });
+// let upload = multer({ dest: 'uploads/' })
 let app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static("dist"));
@@ -44,9 +54,9 @@ app.post("/login", (req, res) => {
 
 
 // This lets users insert data to the Staff Database 
-app.post("/registerStaff", (req, res) => {
+app.post("/registerStaff", upload.single('filename'), (req, res) => {
   let sql =
-    "INSERT INTO Staff (FirstName, LastName, Password, Username, StateOfOrigin, Rank) VALUES (?,?,?,?,?,?)";
+    "INSERT INTO Staff (FirstName, LastName, Password, Username, StateOfOrigin,Rank, ImgLink) VALUES (?,?,?,?,?,?,?)";
   let data = {
     FirstName: req.body.finame,
     LastName: req.body.laname,
@@ -54,7 +64,9 @@ app.post("/registerStaff", (req, res) => {
     Username: req.body.Username,
     StateOfOrigin: req.body.Oname,
     Rank: req.body.Rname,
+    ImgLink: req.file.path.replace("\\","/")
   };
+  console.log(req.file);
   if (!data.FirstName  || !data.LastName || data.Password.length < 8 || !!isNaN(parseInt(data.Rank))|| parseInt(data.Rank) >= 8 || parseInt(data.Rank) < 0  || !data.StateOfOrigin || !data.Username){
    return  res.status(404).json({message: "Invalid data"})
   }
@@ -65,6 +77,7 @@ app.post("/registerStaff", (req, res) => {
     data.Username,
     data.StateOfOrigin,
     data.Rank,
+    data.ImgLink,
   ];
   console.log(params)
 

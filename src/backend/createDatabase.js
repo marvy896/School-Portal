@@ -17,6 +17,7 @@ let db = new sqlite.Database(DBSOURCE, (err) => {
           Password Text, 
           Username Text NOT NULL UNIQUE, 
           StateOfOrigin Text, 
+          ImgLink Text,
           Rank Integer)`,
       (err) => {
         if (err) {
@@ -44,6 +45,7 @@ let db = new sqlite.Database(DBSOURCE, (err) => {
     );
     console.log("success!")
   }
+
 });
 
  //db.close();

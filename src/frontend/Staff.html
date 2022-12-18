@@ -13,7 +13,7 @@
     <header>
       <h1>Staff Registration</h1>
     </header>
-    <form action="/registerStaff" method="post" class="regStudents">
+    <form action="/registerStaff" method="post" class="regStudents" enctype="multipart/form-data">
       <h3>Staff Registration</h3>
       <label for="finame">First Name:</label>
       <input type="text" id="finame" name="finame" /><br />
@@ -26,6 +26,7 @@
       <label htmlFor="Username"> Staff User Name</label>
       <input type="text" id="Username" name="Username" />
       <br />
+      <input type="file" id="myFile" name="filename" />
       <label htmlFor="password">PassWord</label>
       <input type="password" id="password" name="password" />
       <button type="submit">Submit</button>

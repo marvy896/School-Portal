@@ -77,14 +77,16 @@ if (err) {
 );
 db.run(
   `CREATE TABLE Class_Students  
-(Class_StudentsId INTEGER Primary Key AutoIncrement, 
-  StudentsId integer,
-  FOREIGN KEY(StudentsId) REFERENCES Students(StudentsId))`,
+(StudentsId integer,
+  ClassId Integer,
+  FOREIGN KEY(StudentsId) REFERENCES Students(StudentsId),
+  FOREIGN KEY(ClassId) REFERENCES Class(ClassId),
+  PRIMARY KEY(ClassId, StudentsId))`,
 (err) => {
 if (err) {
-  console.log("not Created Courses", err)
+  console.log("not Created Class_Students", err)
 } else {
-  console.log("Created CLASS Courses")
+  console.log("Created CLASS Class_Students")
 }
 }
 );

@@ -124,6 +124,7 @@ a:hover{
 }
 /** Display Data */
 .course-box{
+    /* display: none; */
     width: auto;
     padding: 5px;
     margin-top: 10px;

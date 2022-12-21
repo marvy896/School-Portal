@@ -85,7 +85,9 @@
                               <th>First Name</th>
                               <th>Last Name</th>
                               <th>Class</th>
-                              <th>Age</th>
+                              <th>D.O.B</th>
+                              <th>Year Enrolled</th>
+                              <th>passport</th>
                             </tr>
                           </thead>
                         </table>
@@ -131,7 +133,9 @@
                       <td>${list.FirstName}</td>
                       <td>${list.LastName}</td>
                       <td>${list.Class}</td>
-                      <td>${list.Age}</td>
+                      <td>${list.Date_of_Birth}</td>
+                      <td>${list.Year_Enrolled}</td>
+                      <td><img src = "${list.Passport}" width = "30" height = "30"></td>
                       </tr>`
                 )
                 .join(" ");
@@ -162,7 +166,7 @@
               <td>${list.Rank}</td>
               <td>${list.Username}</td>
               <td>${list.StateOfOrigin}</td>
-              <td>${list.ImgLink}</td>
+              <td> <img src = "${list.ImgLink}" width = "30" height = "30"></td>
               </tr>`
                 )
                 .join(" ");

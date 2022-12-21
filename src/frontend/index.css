@@ -51,7 +51,7 @@ button{
 }
 .regStudents{
   display: flex;
-  height: 120vh;
+  height: auto;
   width: 500px;
   flex-direction: column;
   justify-content: center;

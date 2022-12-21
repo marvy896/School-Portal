@@ -2,15 +2,15 @@ import express, { response } from "express";
 import path from "path";
 import db from "./createDatabase.js";
 import md5 from "md5";
-import bodyParser from "body-parser"; 
+import bodyParser from "body-parser";
 import multer from "multer";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-      cb(null, "uploads/");
+    cb(null, "uploads/");
   },
   filename: (req, file, cb) => {
-      cb(null, file.originalname);
+    cb(null, file.originalname);
   },
 });
 // Middleware
@@ -23,6 +23,7 @@ let port = 3000;
 app.use(express.json({ extended: false }));
 app.use("/", express.static("src/frontend"));
 app.use("/img", express.static("img"));
+app.use("/uploads", express.static("uploads"));
 
 //Validation of User: This checks the uniqu username and commpares the password provided
 //Then shows the user that logged in
@@ -52,9 +53,8 @@ app.post("/login", (req, res) => {
   });
 });
 
-
-// This lets users insert data to the Staff Database 
-app.post("/registerStaff", upload.single('filename'), (req, res) => {
+// This lets users insert data to the Staff Database
+app.post("/registerStaff", upload.single("filename"), (req, res) => {
   let sql =
     "INSERT INTO Staff (FirstName, LastName, Password, Username, StateOfOrigin,Rank, ImgLink) VALUES (?,?,?,?,?,?,?)";
   let data = {
@@ -64,11 +64,20 @@ app.post("/registerStaff", upload.single('filename'), (req, res) => {
     Username: req.body.Username,
     StateOfOrigin: req.body.Oname,
     Rank: req.body.Rname,
-    ImgLink: req.file.path.replace("\\","/")
+    ImgLink: req.file.path.replace("\\", "/"),
   };
   console.log(req.file);
-  if (!data.FirstName  || !data.LastName || data.Password.length < 8 || !!isNaN(parseInt(data.Rank))|| parseInt(data.Rank) >= 8 || parseInt(data.Rank) < 0  || !data.StateOfOrigin || !data.Username){
-   return  res.status(404).json({message: "Invalid data"})
+  if (
+    !data.FirstName ||
+    !data.LastName ||
+    data.Password.length < 8 ||
+    !!isNaN(parseInt(data.Rank)) ||
+    parseInt(data.Rank) >= 8 ||
+    parseInt(data.Rank) < 0 ||
+    !data.StateOfOrigin ||
+    !data.Username
+  ) {
+    return res.status(404).json({ message: "Invalid data" });
   }
   let params = [
     data.FirstName,
@@ -79,9 +88,8 @@ app.post("/registerStaff", upload.single('filename'), (req, res) => {
     data.Rank,
     data.ImgLink,
   ];
-  console.log(params)
+  console.log(params);
 
-  
   db.run(sql, params, function (err, result) {
     if (err) {
       res.status(400).json({ error: err.message });
@@ -96,20 +104,38 @@ app.post("/registerStaff", upload.single('filename'), (req, res) => {
   });
 });
 
-// This lets users insert data to the Students Database 
-app.post("/registerStudents", (req, res) => {
+// This lets users insert data to the Students Database
+app.post("/registerStudents", upload.single("passport"), (req, res) => {
   let sql =
-    "INSERT INTO Students (FirstName, LastName, Class, Age) VALUES (?,?,?,?)";
+    "INSERT INTO Students (FirstName, LastName, Class, Date_of_Birth, Year_Enrolled, Password, Passport) VALUES (?,?,?,?,?,?,?)";
   let data = {
     FirstName: req.body.fname,
     LastName: req.body.lname,
     Class: req.body.Cname,
-    Age: req.body.Agname,
+    Date_of_Birth: req.body.Agname,
+    Year_Enrolled: req.body.YearEnrolled,
+    Password: req.body.password,
+    Passport: req.file.path.replace("\\", "/"),
   };
-  if(!data.FirstName || !data.LastName  ||!!isNaN(parseInt(data.Class))|| parseInt(data.Class) >= 6|| parseInt(data.Class) < 0 || !data.Age){
-    return  res.status(404).json({message: "Invalid data"})
+  if (
+    !data.FirstName ||
+    !data.LastName ||
+    !!isNaN(parseInt(data.Class)) ||
+    parseInt(data.Class) >= 6 ||
+    parseInt(data.Class) < 0 ||
+    !data.Date_of_Birth
+  ) {
+    return res.status(404).json({ message: "Invalid data" });
   }
-  let params = [data.FirstName, data.LastName, data.Class, data.Age];
+  let params = [
+    data.FirstName,
+    data.LastName,
+    data.Class,
+    data.Date_of_Birth,
+    data.Year_Enrolled,
+    md5(data.Password),
+    data.Passport,
+  ];
   db.run(sql, params, function (err, result) {
     if (err) {
       res.status(400).json({ error: err.message });
@@ -155,47 +181,46 @@ app.get("/StudentsData", (req, res) => {
   });
 });
 app.post("/deleteStaff", (req, res) => {
-  let sql ="DELETE FROM Staff WHERE StaffId=?";
+  let sql = "DELETE FROM Staff WHERE StaffId=?";
   let params = [];
-  db.all( sql,params, (err, rows) =>{
+  db.all(sql, params, (err, rows) => {
     if (err) {
-      res.status(400).json({error: err.message});
+      res.status(400).json({ error: err.message });
       return;
     }
     res.json({
       message: "Success",
       data: rows,
-    })
-  })
-})
+    });
+  });
+});
 app.post("/deleteStudents", (req, res) => {
-  let sql ="DELETE FROM Students WHERE StudentsId=?";
+  let sql = "DELETE FROM Students WHERE StudentsId=?";
   let params = [];
-  db.all( sql,params, (err, rows) =>{
+  db.all(sql, params, (err, rows) => {
     if (err) {
-      res.status(400).json({error: err.message});
+      res.status(400).json({ error: err.message });
       return;
     }
     res.json({
       message: "Success",
       data: rows,
-    })
-  })
-})
-app.get("/totalStudents",(req, res) => {
-  let sql = "SELECT count(*) as TotalStudents from Students"
-  db.all(sql, (err, rows) =>{
+    });
+  });
+});
+app.get("/totalStudents", (req, res) => {
+  let sql = "SELECT count(*) as TotalStudents from Students";
+  db.all(sql, (err, rows) => {
     if (err) {
-      res.status(500).json({error:err.message});
+      res.status(500).json({ error: err.message });
       return;
     }
     res.json({
       message: "Success",
-      data:rows[0],
-    })
-  })
-})
-
+      data: rows[0],
+    });
+  });
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

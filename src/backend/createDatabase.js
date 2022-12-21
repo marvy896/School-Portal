@@ -34,7 +34,10 @@ let db = new sqlite.Database(DBSOURCE, (err) => {
     FirstName Text, 
     LastName Text, 
     Class Integer, 
-    Age Integer)`,
+    Date_of_Birth DATE,
+    Year_Enrolled Integer,
+    Password Text,
+    Passport Text)`,
       (err) => {
         if (err) {
           console.log("not Created Students")
@@ -43,9 +46,49 @@ let db = new sqlite.Database(DBSOURCE, (err) => {
         }
       }
     );
-    console.log("success!")
+db.run(
+  `CREATE TABLE Courses 
+(CourseId INTEGER Primary Key AutoIncrement, 
+CourseName Text)`,
+(err) => {
+if (err) {
+  console.log("not Created Courses", err)
+} else {
+  console.log("Created CLASS Courses")
+}
+}
+);
+db.run(
+  `CREATE TABLE Class 
+(ClassId INTEGER Primary Key AutoIncrement, 
+ClassName Text, 
+StaffID INTEGER,
+CourseId INTEGER,
+FOREIGN KEY(StaffId) REFERENCES Staff(StaffId),
+FOREIGN KEY(CourseId) REFERENCES Staff(CourseId)
+)`,
+(err) => {
+if (err) {
+  console.log("not Created CLASS", err)
+} else {
+  console.log("Created CLASS TABLE")
+}
+}
+);
+db.run(
+  `CREATE TABLE Class_Students  
+(Class_StudentsId INTEGER Primary Key AutoIncrement, 
+  StudentsId integer,
+  FOREIGN KEY(StudentsId) REFERENCES Students(StudentsId))`,
+(err) => {
+if (err) {
+  console.log("not Created Courses", err)
+} else {
+  console.log("Created CLASS Courses")
+}
+}
+);
   }
-
 });
 
  //db.close();

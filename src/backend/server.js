@@ -154,6 +154,48 @@ app.get("/StudentsData", (req, res) => {
     });
   });
 });
+app.post("/deleteStaff", (req, res) => {
+  let sql ="DELETE FROM Staff WHERE StaffId=?";
+  let params = [];
+  db.all( sql,params, (err, rows) =>{
+    if (err) {
+      res.status(400).json({error: err.message});
+      return;
+    }
+    res.json({
+      message: "Success",
+      data: rows,
+    })
+  })
+})
+app.post("/deleteStudents", (req, res) => {
+  let sql ="DELETE FROM Students WHERE StudentsId=?";
+  let params = [];
+  db.all( sql,params, (err, rows) =>{
+    if (err) {
+      res.status(400).json({error: err.message});
+      return;
+    }
+    res.json({
+      message: "Success",
+      data: rows,
+    })
+  })
+})
+app.get("/totalStudents",(req, res) => {
+  let sql = "SELECT count(*) as TotalStudents from Students"
+  db.all(sql, (err, rows) =>{
+    if (err) {
+      res.status(500).json({error:err.message});
+      return;
+    }
+    res.json({
+      message: "Success",
+      data:rows[0],
+    })
+  })
+})
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

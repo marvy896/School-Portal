@@ -103,7 +103,74 @@ app.post("/login", (req, res) => {
     console.log(rows);
   });
 });
+//this inserts class table
+app.post("/RegisterClass", (req, res) =>{
+  let sql = "INSERT INTO Class (ClassName,StaffID, CourseID) VALUES (?,?,?)"
+  let data = {
+    ClassName: req.body.ClassName,
+    StaffID: req.body.StaffID,
+    CourseID: req.body.CourseID
+  }
+  let params = [data.ClassName, data.StaffID, data.CourseID]
+  db.run(sql, params, function (err, result) {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    console.log(req.body);
+    res.status(201).json({
+      message: "successful",
+      data,
+      result,
+    });
+  });
+});
 
+//this inserts Courses table
+app.post("/RegisterCourse", (req, res) =>{
+  let sql = "INSERT INTO Courses (CourseName) VALUES (?)"
+  let data = {
+    CourseName: req.body.CourseName
+  }
+  let params = [
+    data.CourseName
+  ]
+  db.run(sql, params, function (err, result) {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    console.log(req.body);
+    res.status(201).json({
+      message: "successful",
+      data,
+      result,
+    });
+  });
+})
+
+//this inserts Class_Students table
+app.post("/RegisterClass_Students", (req, res) =>{
+  let sql = "INSERT INTO Class_Students (ClassName)"
+  let data = {
+    ClassName: req.body.ClassName
+  }
+  let params = [
+    data.ClassName
+  ]
+  db.run(sql, params, function (err, result) {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    console.log(req.body);
+    res.status(201).json({
+      message: "successful",
+      data,
+      result,
+    });
+  });
+})
 // This lets users insert data to the Staff Database
 app.post("/registerStaff", upload.single("filename"), (req, res) => {
   let sql =

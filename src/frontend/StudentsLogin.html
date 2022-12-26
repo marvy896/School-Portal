@@ -11,24 +11,26 @@
   <body>
 <div class="login">
     <header>
-        <h1>Staff Login</h1></header>
-    <form action="/login" method="post">
-      <label htmlFor="Username"> Staff User Name</label>
-      <input type="text" id="Username" name="Username" required/>
+        <h1>Students Login</h1></header>
+    <form action="/StudentsLogin" method="post">
+      <label htmlFor="Year_Enrolled"> Year Enrolled</label>
+      <input type="text" id="Year_Enrolled" name="Year_Enrolled" required/>
       <br />
       <label htmlFor="password">PassWord</label>
       <input type="password" id="password" name="Password" required/>
       <button type="submit">Submit</button>
     </form>
     <section>
-    <h3> Don't have an account as a Staff?
-        <button onclick="window.location.href='Staff.html'">Register Here</button>
+    <h3> Are you a Staff?
+        <button onclick="window.location.href='index.html'">Login Here</button>
     </h3>
-    <h3> Are you a Student?
-        <button onclick="window.location.href='StudentsLogin.html'">Login Here</button>
-    </h3>
+    <h3> Don't have an account as a Student?
+      <button onclick="window.location.href='students.html'">Register Here</button>
+  </h3>
   </section>
     <div>
-
+        <div class="next">
+            <button onclick="window.location.href='index.html'">Back</button>
+        </div>
     </body>
     </html>

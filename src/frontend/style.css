@@ -139,3 +139,43 @@ table, th, td{
     border: 5px solid rgb(7, 7, 7);
     color:rgb(4, 4, 4);
   }
+  /**
+  Student Profile  */
+  .profile{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .displayStudent{
+    border: 2px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #ffffff;
+    width: 600px;
+    height: auto;
+    margin: 100px;
+    border-radius: 50px;
+  }
+  .stu{
+    width: 500px;
+    margin-bottom: 10px;
+    border: 2px solid black;
+    background: rgb(0, 128, 255);
+    border-radius: 20px;
+    height: 50px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+ .imgLogo{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 2px solid black;
+    border-radius: 20px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+ }

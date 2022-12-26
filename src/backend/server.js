@@ -4,6 +4,7 @@ import db from "./createDatabase.js";
 import md5 from "md5";
 import bodyParser from "body-parser";
 import multer from "multer";
+import { send } from "process";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -27,6 +28,56 @@ app.use("/uploads", express.static("uploads"));
 
 //Validation of User: This checks the uniqu username and commpares the password provided
 //Then shows the user that logged in
+app.post("/StudentsLogin", (req, res) => {
+  let sql = " SELECT * FROM Students where Year_Enrolled =?";
+  let data = {
+    Year_Enrolled: req.body.Year_Enrolled,
+    Password: req.body.Password,
+  };
+  let params = [data.Year_Enrolled];
+  db.all(sql, params, function (err, rows) {
+    if (err) {
+      res.status(400).json({ error: err });
+      return;
+    }
+    if (!rows.length) {
+      return res.status(404).json({ message: "user does not exist" });
+    }
+    console.log(req.body);
+    if (md5(req.body.Password) === rows[0].Password) {
+      res.status(303);
+      res.setHeader(
+        "Location",
+        `/StudentProfile.html?id=${rows[0].StudentsId}`
+      );
+      //return res.sendFile(path.resolve("src/frontend/StudentProfile.html"));
+      res.json({ StudentsId: rows[0].StudentsId });
+    } else {
+      res.status(400).send("something went wrong!");
+    }
+    console.log(rows);
+  });
+});
+
+app.get("/getSpecStudent", (req, res) => {
+  let profile = "SELECT * FROM Students where StudentsId = ?";
+  let students = req.url.split("?")[1];
+  let stu = new URLSearchParams(students);
+  let data = [stu.get("StudentsId")];
+  console.log(data);
+  db.all(profile, data, function (err, rows) {
+    if (err) {
+      res.status(400).json({ error: err });
+      return;
+    }
+    if (!rows.length) {
+      return res.status(404).json({ message: "user does not exist" });
+    }
+    delete rows[0].Password;
+    res.json(rows[0]);
+  });
+});
+
 app.post("/login", (req, res) => {
   let sql = " SELECT * from Staff where Username = ?";
   let data = {

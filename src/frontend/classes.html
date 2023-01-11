@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>School Portal</title>
+    <link rel="stylesheet" href="index.css" />
+  </headntent="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <form action="/RegisterClass" method="post" class="regStudents">
+        <h3>Choose Class</h3>
+        <label for="ClassName">Classes</label>
+        <select id="ClassName" name="ClassName">
+            <option value="Jss1">Class 1</option>
+            <option value="Jss2">Class 2</option>
+            <option value="Jss3">Class 3</option>
+            <option value="Sss4">Class 4</option>
+            <option value="Sss5">Class 5</option>
+            <option value="Sss6">Class 6</option>
+          </select>
+        <label for="StaffID">StaffID</label>
+        <input type="text" id="StaffID" name="StaffID" /><br />
+        <label for="CourseID">Course Name</label>
+        <select id="CourseID" name="CourseID">
+          
+        </select>
+        <button type="submit">Submit</button>
+      </form>
+      <div class="next">
+        <button onclick="window.location.href='index.html'">Back</button>
+    </div>
+    <script>
+      let fetchCourse = fetch("/getCourse");
+      let course = null
+      fetchCourse
+      .then((details) => details.json())
+      .then(({rows}) => {
+        console.log(rows)
+        course = rows.map((list, index) =>
+        `<option value="${list.CourseId}">${list.CourseName}</option>`
+        )
+        .join(" ")
+          document.querySelector("#CourseID").innerHTML = course;
+      })
+    </script>
+</body>
+</html>

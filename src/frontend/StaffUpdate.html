@@ -5,18 +5,80 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>School Portal</title>
-    <script src="/app.js"></script>
-    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="index.css"/>
   </headntent="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <form action="/" method="post" class="regStudents">
-        <h3>Choose Courses and Class</h3>
-        <label for="finame">Courses</label>
-        <input type="text" id="Coname" name="Coname"/><br />
-        <label for="laname">Class</label>
-        <input type="text" id="Clname" name="Clname" /><br />
-        <button type="submit">Submit</button>
+    <title>Update Page</title>
+    <div class="Update">
+      <div class="update-grid">
+        <form action="/updateStaff" method="post" class="regStudents" enctype="multipart/form-data" >
+          <h3>Update Staff</h3>
+          <label for="StaffId">Staff Id</label>
+          <input type="text" id="StaffId" name="StaffId"/><br />
+          <label for="FirstName">First Name</label>
+          <input type="text" id="FirstName" name="FirstName" /><br />
+          <label for="LastName">Last Name</label>
+          <input type="text" id="LastName" name="LastName"/><br />
+          <label for="Password">Password</label>
+          <input type="text" id="Password" name="Password" /><br />
+          <label for="Username">Username</label>
+          <input type="text" id="Username" name="Username"/><br />
+          <label for="StateOfOrigin">State Of Origin</label>
+          <input type="text" id="StateOfOrigin" name="StateOfOrigin" /><br />
+          <label for="ImgLink">ImgLink</label>
+          <input type="file" id="ImgLink" name="ImgLink" /><br />
+          <label for="Rank">Rank</label>
+          <input type="text" id="Rank" name="Rank" /><br />
+          <label for="StaffId">StaffId</label>
+          <input type="text" id="StaffId" name="StaffId" /><br />
+          <button type="submit">Update Staff</button>
+        </form>
+      </div>
+      <div class="update-grid"> <form action="/updateStudents" method="post" class="regStudents" enctype="multipart/form-data" >
+        <h3>Update Students</h3>
+        <label for="StudentsId">Students ID</label>
+        <input type="text" id="StudentsId" name="StudentsId"/><br />
+        <label for="FirstName">First Name</label>
+        <input type="text" id="FirstName" name="FirstName" /><br />
+        <label for="LastName">Last Name</label>
+        <input type="text" id="LastName" name="LastName"/><br />
+        <label for="Date_of_Birth">Date of Birth</label>
+        <input type="date" id="Date_of_Birth" name="Date_of_Birth" /><br />
+        <label for="Year_Enrolled">Year Enrolled</label>
+        <input type="text" id="Year_Enrolled" name="Year_Enrolled"/><br />
+        <label for="PassWord">PassWord</label>
+        <input type="passWord" id="PassWord" name="PassWord" /><br />
+        <label for="ImgLink">Passport</label>
+        <input type="file" id="Passport" name="Passport" /><br />
+        <button type="submit">Update Students</button>
       </form>
+    </div>
+    <div class="update-grid"> 
+      <form action="/updateClass" method="post" class="regStudents">
+        <h3>Update Class</h3>
+        <label for="ClassId">Class Id</label>
+        <input type="text" id="ClassId" name="ClassId"/><br />
+        <label for="ClassName">Class</label>
+        <input type="text" id="ClassName" name="ClassName" /><br />
+        <label for="StaffID">Staff ID</label>
+        <input type="text" id="StaffID" name="StaffID" /><br />
+        <label for="CourseId">Course ID</label>
+        <input type="text" id="CourseId" name="CourseId" /><br />
+        <button type="submit">Update Class</button>
+      </form>
+    </div>
+    <div class="update-grid">
+      <form action="/updateCourse" method="post" class="regStudents">
+          <h3>Update Course</h3>
+          <label for="CourseId">Course Id</label>
+          <input type="text" id="CourseId" name="CourseId"/><br />
+          <label for="laname">Course</label>
+          <input type="text" id="CourseName" name="CourseName" /><br />
+          <button type="submit">Update Course</button>
+      </form>
+    </div>
+    </div>
+    
       <div class="next">
         <button onclick="window.location.href='index.html'">Back</button>
     </div>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>School Portal</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="index.css"/>
+  </headntent="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <form action="/RegisterClass_Students" method="post" class="regStudents">
+        <h3>Enroll Class</h3>
+        <label for="ClassId">Classes</label>
+        <select id="ClassId" name="ClassId">    
+          </select>
+        <label for="StudentsId">StudentsId</label>
+        <input type="text" id="StudentsId" name="StudentsId" /><br />
+        <button type="submit">Submit</button>
+      </form>
+      <div class="next">
+        <button onclick="window.location.href='index.html'">Back</button>
+    </div>
+</body>
+<script>
+  let fetchCourse = fetch("/getClasses");
+  let course = null
+  fetchCourse
+  .then((details) => details.json())
+  .then(({rows}) => {
+    console.log(rows)
+    course = rows.map((list, index) =>
+    `<option value="${list.ClassId}">${list.CourseName}(${list.ClassName} with ${list.FirstName})</option>`
+    )
+    .join(" ")
+      document.querySelector("#ClassId").innerHTML = course;
+  })
+</script>
+</html>

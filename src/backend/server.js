@@ -142,39 +142,55 @@ app.post("/registerStaff", upload.single("filename"), (req, res) => {
 });
 //update Staff
 app.post("/updateStaff", upload.single("ImgLink"), (req, res) => {
-  let sql = "UPDATE Staff SET  FirstName = ?,LastName = ?,Password = ?,Username = ?,StateOfOrigin = ?,ImgLink = ?, Rank = ? WHERE StaffId = ?"
+ // let sql = "UPDATE Staff SET  FirstName = ?,LastName = ?,Password = ?,Username = ?,StateOfOrigin = ?,ImgLink = ?, Rank = ? WHERE StaffId = ?"
  let data = {
   FirstName: req.body.FirstName,
   LastName: req.body.LastName,
   Password: req.body.Password,
   Username: req.body.Username,
   StateOfOrigin: req.body.StateOfOrigin,
-  ImgLink: req.file.path.replace("\\", "/"),
+  ImgLink: (req.file ? req.file.path.replace("\\", "/"): undefined),
   Rank: req.body.Rank,
   StaffId: req.body.StaffId
  }
+ let sqlStaff = []
+ let params = []
+ if(data.FirstName){
+  sqlStaff.push("FirstName = ?");
+  params.push(data.FirstName)
+ }
+ if(data.LastName){
+  sqlStaff.push("LastName = ?");
+  params.push(data.LastName)
+ }
+ if(data.Password){
+  sqlStaff.push("Password = ?");
+  params.push(md5(data.Password))
+ }
+ if(data.Username){
+  sqlStaff.push("Username = ?");
+  params.push(data.Username)
+ }
+ if(data.StateOfOrigin){
+  sqlStaff.push("StateOfOrigin = ?");
+  params.push(data.StateOfOrigin)
+ }
+ if(data.ImgLink){
+  sqlStaff.push("ImgLink = ?");
+  params.push(data.ImgLink)
+ }
+ if(data.Rank){
+  sqlStaff.push("Rank = ?");
+  params.push(data.Rank)
+ }
+ params.push(data.StaffId)
+ let sql = ` UPDATE Staff SET ${sqlStaff.join(",")} WHERE StaffId = ?`
+
  if (
-  !data.FirstName ||
-  !data.LastName ||
-  data.Password.length < 8 ||
-  !!isNaN(parseInt(data.Rank)) ||
-  parseInt(data.Rank) >= 8 ||
-  parseInt(data.Rank) < 0 ||
-  !data.StateOfOrigin ||
-  !data.Username
+  !data.StaffId || sqlStaff.length == 0
 ) {
   return res.status(404).json({ message: "Invalid data" });
 }
-  let params = [
-    data.FirstName,
-    data.LastName,
-    md5(data.Password),
-    data.Username,
-    data.StateOfOrigin,
-    data.ImgLink,
-    data.Rank,
-    data.StaffId,
-  ];
   db.all(sql, params, (err, rows) => {
     if (err) {
       res.status(400).json({ error: err.message });
@@ -272,33 +288,53 @@ app.post("/registerStudents", upload.single("passport"), (req, res) => {
 
 //Update of Students Tables
 app.post("/updateStudents", upload.single("Passport"), (req, res) => {
-  let sql = "UPDATE Students SET  FirstName = ?,LastName = ?,Date_of_Birth = ?,Year_Enrolled = ?, Password =?, Passport =? WHERE StudentsId = ?"
- let data = {
+  // let sql = "UPDATE Students SET  FirstName = ?,LastName = ?,Date_of_Birth = ?,Year_Enrolled = ?, Password =?, Passport =? WHERE StudentsId = ?"
+  console.log(req.file)
+  let data = {
   FirstName: req.body.FirstName,
   LastName: req.body.LastName,
   Date_of_Birth: req.body.Date_of_Birth,
   Year_Enrolled: req.body.Year_Enrolled,
-  Password: req.body.Password,
-  Passport:  req.file.path.replace("\\", "/"),
+  Password: req.body.PassWord,
+  Passport:  (req.file ? req.file.path.replace("\\", "/"): undefined),
   StudentsId: req.body.StudentsId
  }
+
+let sqlUpdate = []
+let params = [];
+if (data.FirstName){
+  sqlUpdate.push("FirstName = ?")
+  params.push(data.FirstName)
+}
+if( data.LastName){
+  sqlUpdate.push("LastName = ?")
+  params.push(data.LastName)
+}
+if( data.Date_of_Birth){
+  sqlUpdate.push("Date_of_Birth = ?")
+  params.push(data.Date_of_Birth)
+}
+if( data.Year_Enrolled){
+  sqlUpdate.push("Year_Enrolled = ?")
+  params.push(data.Year_Enrolled)
+}
+if( data.Password){
+  sqlUpdate.push("Password = ?")
+  params.push(md5(data.Password))
+}
+if( data.Passport ){
+  sqlUpdate.push("Passport = ?")
+  params.push(data.Passport)
+}
+params.push(data.StudentsId)
+let sql3 =`Update Students SET ${sqlUpdate.join(",")} WHERE StudentsId = ?` 
+
  if (
-  !data.FirstName ||
-  !data.LastName ||
-  !data.Date_of_Birth
+  !data.StudentsId || sqlUpdate.length == 0
 ) {
   return res.status(404).json({ message: "Invalid data" });
 }
-  let params = [
-    data.FirstName,
-    data.LastName,
-    data.Date_of_Birth,
-    data.Year_Enrolled,
-    data.Password,
-    data.Passport,
-    data.StudentsId
-  ];
-  db.all(sql, params, (err, rows) => {
+  db.all(sql3, params, (err, rows) => {
     if (err) {
       res.status(400).json({ error: err.message });
       return;
@@ -574,6 +610,16 @@ app.get("/getClassStudents", (req, res) => {
     });
   });
 });
+//CHANGE PASSWORD
+app.post("/", (req, res) =>{
+  let [Password, PassWord2] = req.body.
+  let sql = "UPDATE Students SET Password = ? Where StudentsId =?"
+  let data = {
+    PassWord: PassWord,
+    PassWord2:PassWord2
+  }
+  
+})
 app.get("/totalStudents", (req, res) => {
   let sql = "SELECT count(*) as TotalStudents from Students";
   db.all(sql, (err, rows) => {

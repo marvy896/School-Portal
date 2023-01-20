@@ -448,7 +448,7 @@ app.post("/updateCourse", (req, res) => {
   });
 })
 app.get("/getCourse", (req, res) => {
-  let sql = "Select * From Courses";
+  let sql = "Select * From Courses  Order By CourseName";
   db.all(sql, (err, rows) => {
     if (err) {
       res.status(500).json({ message: "error from sever" });
@@ -598,7 +598,7 @@ app.post("/RegisterClass_Students", (req, res) => {
 });
 app.get("/getClassStudents", (req, res) => {
   //use sql join to get the students and class name, not *
-  let sql = "SELECT * FROM Class_Students";
+  let sql = "SELECT Students.StudentsId, Students.FirstName,Class.ClassId,Class.ClassName,Class.StaffId,Courses.CourseName, Class.CourseId,Class_Students.StudentsId from Class_Students LEFT JOIN Students ON Students.StudentsId = Class_Students.StudentsId LEFT JOIN Class ON Class.ClassId = Class_Students.ClassId LEFT JOIN Courses On Courses.CourseId = Class.CourseId; "
   db.all(sql, (err, rows) => {
     if (err) {
       res.status(500).json({ error: err.message });
@@ -610,16 +610,52 @@ app.get("/getClassStudents", (req, res) => {
     });
   });
 });
+app.get("/getClassStudentsEach", (req, res) => {
+  //use sql join to get the students and class name, not *
+  let sql = " SELECT Students.StudentsId, Students.FirstName,Class.ClassId,Class.ClassName,Class.StaffId,Courses.CourseName, Class.CourseId,Class_Students.StudentsId from Class_Students LEFT JOIN Students ON Students.StudentsId = Class_Students.StudentsId LEFT JOIN Class ON Class.ClassId = Class_Students.ClassId  LEFT JOIN Courses On Courses.CourseId = Class.CourseId WHERE Class.ClassId =?;"
+  let data ={
+    ClassId: req.body.ClassId
+  }
+  let params = [
+    data.ClassId
+  ]
+  db.all(sql,params, (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json({
+      message: "Success",
+      data: rows,
+    });
+  });
+});
 //CHANGE PASSWORD
-app.post("/", (req, res) =>{
-  let [Password, PassWord2] = req.body.
+app.post("/updatePassword", (req, res) =>{
+  let [PassWord, PassWord2] = req.body.PassWord
   let sql = "UPDATE Students SET Password = ? Where StudentsId =?"
   let data = {
+    StudentsId: req.body.StudentsId,
     PassWord: PassWord,
     PassWord2:PassWord2
   }
-  
-})
+ let params =[
+   data.StudentsId,
+   md5(data.PassWord),
+   md5(data.PassWord2),
+ ]
+ db.all(sql, params, (err, rows) => {
+  if (err) {
+    res.status(400).json({ error: err.message });
+    return;
+  }
+  res.json({
+    message: "Success",
+    data: rows,
+  });
+});
+});
+
 app.get("/totalStudents", (req, res) => {
   let sql = "SELECT count(*) as TotalStudents from Students";
   db.all(sql, (err, rows) => {

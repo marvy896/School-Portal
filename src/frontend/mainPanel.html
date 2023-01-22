@@ -88,210 +88,182 @@
           <div class="card">
             <i class="fas fa-laptop-code"></i>
             <h3>Students Data</h3>
-            <p>Join us Today!</p>
-            <button id="updata">Get Started</button>
+            <p>See Students Data</p>
+            <button id="updata">View Data</button>
           </div>
           <div class="card">
             <i class="fas fa-laptop-code"></i>
             <h3>Staff Data</h3>
-            <p>Join us Today!</p>
-            <button id="stdata">Get Started</button>
+            <p>See Staff Data</p>
+            <button id="stdata">View Data</button>
           </div>
           <div class="card">
             <i class="fas fa-laptop-code"></i>
             <h3>Classes</h3>
-            <p>Join us Today!</p>
-            <button id="courseStudents">Get Started</button>
+            <p>Our Classes</p>
+            <button id="courseStudents">View Data</button>
           </div>
           <div class="card">
             <i class="fas fa-laptop-code"></i>
             <h3>Courses</h3>
             <p>Our Courses!</p>
-            <button id="stCldata">Get Started</button>
+            <button id="stCldata">View Data</button>
           </div>
         </div>
         <section class="main-course">
-          <h1>Students Data</h1>
+          <h1>View Data</h1>
+          <table class="table">
+            <thead></thead>
+            <tbody></tbody>
+          </table>
+          <table class="table1">
+            <thead></thead>
+            <tbody></tbody>
+          </table>
+          <table class="table2">
+            <thead></thead>
+            <tbody></tbody>
+          </table>
+          <table class="table3">
+            <thead></thead>
+            <tbody></tbody>
+          </table>
         </section>
-        <div class="course-box">
-          <table id="table">
-            <thead>
-              <tr>
-                <th>Students Id</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>D.O.B</th>
-                <th>Year Enrolled</th>
-                <th>passport</th>
-              </tr>
-            </thead>
-          </table>
-        </div>
-        <h1>Staff Data</h1>
-        <div class="course-box">
-          <table id="tableStaff">
-            <thead>
-              <tr>
-                <th>Staff Id</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Rank</th>
-                <th>Username</th>
-                <th>State Of Origin</th>
-                <th>Image</th>
-              </tr>
-            </thead>
-          </table>
-        </div>
-        <div class="course-box">
-          <table id="tableStudentsStaff">
-            <thead>
-              <tr>
-                <th>Course Id</th>
-                <th>Course Name</th>
-              </tr>
-            </thead>
-          </table>
-        </div>
-        <div class="course-box">
-          <table id="tableStudentsStudents">
-            <thead>
-              <tr>
-                <th>ClassId</th>
-                <th>ClassName</th>
-                <th>StudentsId</th>
-                <th>FirstName</th>
-                <th>StaffID</th>
-                <th>Course Id</th>
-                <th>Course Name</th>
-              </tr>
-            </thead>
-          </table>
-        </div>
       </section>
     </div>
+    <script></script>
     <script>
-      let studentsDataTable = () => {
-        let domFrag = new DocumentFragment();
-        let tbody = document.createElement("tbody");
-        let str = null;
-        // API for get Students DATA
-        let fetchRes = fetch("/StudentsData");
-        // fetchRes is the promise to resolve
-        // it by using.then() method
-        fetchRes
-          .then((details) => details.json())
+      async function studentsDataTable(url, table) {
+        let tableHead = document.querySelector("thead");
+        let tableBody = document.querySelector("tbody");
+        let fetchStaff = fetch("/StudentsData");
+        fetchStaff
+          .then((Details) => Details.json())
           .then(({ data }) => {
-            console.log(data);
-            str = data
-              .map(
-                (list, index) =>
-                  `<tr id = ${index}>
-                        <td>${list.StudentsId}</td>
-                        <td>${list.FirstName}</td>
-                        <td>${list.LastName}</td>
-                        <td>${list.Date_of_Birth}</td>
-                        <td>${list.Year_Enrolled}</td>
-                        <td><img src = "${list.Passport}" width = "30" height = "30"></td>
-                        </tr>`
-              )
-              .join(" ");
-            tbody.innerHTML = str;
-            domFrag.appendChild(tbody);
-            document.querySelector("#table").appendChild(domFrag);
+            console.log(data[0]);
+            tableHead.innerHTML = "<tr></tr>";
+            tableBody.innerHTML = "";
+            for (const headerText in data[0]) {
+              const HeaderElement = document.createElement("th");
+              HeaderElement.textContent = headerText;
+              tableHead.querySelector("tr").appendChild(HeaderElement);
+            }
+            //contents
+            for (let i = 0; i < data.length; i++) {
+              const obj = Object.values(data[i]);
+              const rowElement = document.createElement("tr");
+              for (const cellText of obj) {
+                
+                  const cellElement = document.createElement("td");
+                  cellElement.textContent = cellText;
+                  rowElement.appendChild(cellElement);
+                
+              }
+              tableBody.appendChild(rowElement);
+            }
           });
-      };
-    </script>
-    <script>
-      let staffData = () => {
-        let staffFrag = new DocumentFragment();
-        let tbody = document.createElement("tbody");
-        let st = null;
+      }
+
+      async function staffData(url, table1) {
+        let tableHead = document.querySelector("thead");
+        let tableBody = document.querySelector("tbody");
         let fetchStaff = fetch("/staffUsers");
         fetchStaff
           .then((Details) => Details.json())
           .then(({ data }) => {
             console.log(data);
-            st = data
-              .map(
-                (list, index) =>
-                  `<tr id = ${index}>
-              <td>${list.StaffId}</td>
-              <td>${list.FirstName}</td>
-              <td>${list.LastName}</td>
-              <td>${list.Rank}</td>
-              <td>${list.Username}</td>
-              <td>${list.StateOfOrigin}</td>
-              <td> <img src = "${list.ImgLink}" width = "30" height = "30"></td>
-              </tr>`
-              )
-              .join(" ");
-            tbody.innerHTML = st;
-            staffFrag.appendChild(tbody);
-            document.querySelector("#tableStaff").appendChild(staffFrag);
+            tableHead.innerHTML = "<tr></tr>";
+            tableBody.innerHTML = "";
+            for (const headerText in data[0]) {
+              const HeaderElement = document.createElement("th");
+              HeaderElement.textContent = headerText;
+              tableHead.querySelector("tr").appendChild(HeaderElement);
+            }
+            //contents
+            for (let i = 0; i < data.length; i++) {
+              const obj = Object.values(data[i]);
+              const rowElement = document.createElement("tr");
+              for (const cellText of obj) {
+                if (typeof cellText === "object") {
+                  const cellElement = document.createElement("td");
+                  cellElement.textContent = object.values(cellText);
+                  rowElement.appendChild(cellElement);
+                } else {
+                  const cellElement = document.createElement("td");
+                  cellElement.textContent = cellText;
+                  rowElement.appendChild(cellElement);
+                }
+              }
+              tableBody.appendChild(rowElement);
+            }
           });
-      };
-      let getCourses = () => {
-        let gtCourses = new DocumentFragment();
-        let tbody = document.createElement("tbody");
-        let st = null;
+      }
 
+      async function getCourses(url, table2) {
+        let tableHead = document.querySelector("thead");
+        let tableBody = document.querySelector("tbody");
         let fetchSt = fetch("/getCourse");
         fetchSt
           .then((Details) => Details.json())
           .then(({ rows }) => {
             console.log(rows);
-            let sort = (a, b) => {
-              return a.CourseName.localeCompare(b.CourseName);
-            };
-            st = rows
-              .sort(sort)
-              .map(
-                (list, index) =>
-                  `<tr id = ${index}>
-              <td>${list.CourseId}</td>
-              <td>${list.CourseName}</td>
-            </tr>`
-              )
-              .join(" ");
-            tbody.innerHTML = st;
-            gtCourses.appendChild(tbody);
-            document
-              .querySelector("#tableStudentsStaff")
-              .appendChild(gtCourses);
+            tableHead.innerHTML = "<tr></tr>";
+            tableBody.innerHTML = "";
+            for (const headerText in rows[0]) {
+              const HeaderElement = document.createElement("th");
+              HeaderElement.textContent = headerText;
+              tableHead.querySelector("tr").appendChild(HeaderElement);
+            }
+            //contents
+            for (let i = 0; i < rows.length; i++) {
+              const obj = Object.values(rows[i]);
+              const rowElement = document.createElement("tr");
+              for (const cellText of obj) {
+                if (typeof cellText === "object") {
+                  const cellElement = document.createElement("td");
+                  cellElement.textContent = object.values(cellText);
+                  rowElement.appendChild(cellElement);
+                } else {
+                  const cellElement = document.createElement("td");
+                  cellElement.textContent = cellText;
+                  rowElement.appendChild(cellElement);
+                }
+              }
+              tableBody.appendChild(rowElement);
+            }
           });
-      };
-      let SeeCourses = () => {
-        let gtCourses = new DocumentFragment();
-        let tbody = document.createElement("tbody");
-        let st = null;
+      }
 
+      async function SeeCourses(url, table3) {
+        let tableHead = document.querySelector("thead");
+        let tableBody = document.querySelector("tbody");
         let fetchSt = fetch("/getClassStudents");
         fetchSt
           .then((Details) => Details.json())
-          .then(({ data }) => {
+          .then(( {data }) => {
             console.log(data);
-            st = data
-              .map(
-                (list, index) =>
-                  `<tr id = ${index}>
-                    <td>${list.ClassId}</td>
-                    <td>${list.ClassName}</td>
-              <td>${list.StudentsId}</td>
-              <td>${list.FirstName}</td>
-              <td>${list.StaffID}</td>
-              <td>${list.CourseId}</td>
-              <td>${list.CourseName}</td>
-            </tr>`
-              )
-              .join(" ");
-            tbody.innerHTML = st;
-            gtCourses.appendChild(tbody);
-            document
-              .querySelector("#tableStudentsStudents")
-              .appendChild(gtCourses);
+            tableHead.innerHTML = "<tr></tr>";
+            tableBody.innerHTML = "";
+            for (const headerText in data[0]) {
+              const HeaderElement = document.createElement("th");
+              HeaderElement.textContent = headerText;
+              tableHead.querySelector("tr").appendChild(HeaderElement);
+            }
+            //contents
+            for (let i = 0; i < data.length; i++) {
+              const obj = Object.values(data[i]);
+              const rowElement = document.createElement("tr");
+              for (const cellText of obj) {
+               
+                  const cellElement = document.createElement("td");
+                  cellElement.textContent = cellText;
+                  rowElement.appendChild(cellElement);
+                
+              }
+              tableBody.appendChild(rowElement);
+            }
           });
-      };
+      }
       document
         .getElementById("stCldata")
         .addEventListener("click", function () {

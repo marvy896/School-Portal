@@ -630,30 +630,32 @@ app.get("/getClassStudentsEach", (req, res) => {
     });
   });
 });
-//CHANGE PASSWORD
+//Forgot PASSWORD
 app.post("/updatePassword", (req, res) =>{
-  let [PassWord, PassWord2] = req.body.PassWord
+  // let [PassWord, PassWord2] = req.body.PassWord
   let sql = "UPDATE Students SET Password = ? Where StudentsId =?"
   let data = {
     StudentsId: req.body.StudentsId,
-    PassWord: PassWord,
-    PassWord2:PassWord2
+    PassWord:  req.body.PassWord,
+    PassWord2: req.body.PassWord2
   }
  let params =[
    data.StudentsId,
    md5(data.PassWord),
-   md5(data.PassWord2),
  ]
- db.all(sql, params, (err, rows) => {
-  if (err) {
-    res.status(400).json({ error: err.message });
-    return;
-  }
-  res.json({
-    message: "Success",
-    data: rows,
+ if (data.PassWord == data.PassWord2){
+    
+   db.all(sql, params, (err, rows) => {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    res.json({
+      message: "Success",
+      data: rows,
+    });
   });
-});
+ }
 });
 
 app.get("/totalStudents", (req, res) => {

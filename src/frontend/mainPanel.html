@@ -112,55 +112,63 @@
         </div>
         <section class="main-course">
           <h1>View Data</h1>
-          <table class="table">
-            <thead></thead>
-            <tbody></tbody>
-          </table>
-          <table class="table1">
-            <thead></thead>
-            <tbody></tbody>
-          </table>
-          <table class="table2">
-            <thead></thead>
-            <tbody></tbody>
-          </table>
-          <table class="table3">
-            <thead></thead>
-            <tbody></tbody>
-          </table>
+
+          <div id="tableRoot" class="table">
+          </div>
         </section>
       </section>
     </div>
     <script></script>
     <script>
-      async function studentsDataTable(url, table) {
-        let tableHead = document.querySelector("thead");
-        let tableBody = document.querySelector("tbody");
-        let fetchStaff = fetch("/StudentsData");
-        fetchStaff
-          .then((Details) => Details.json())
-          .then(({ data }) => {
-            console.log(data[0]);
-            tableHead.innerHTML = "<tr></tr>";
-            tableBody.innerHTML = "";
-            for (const headerText in data[0]) {
-              const HeaderElement = document.createElement("th");
-              HeaderElement.textContent = headerText;
-              tableHead.querySelector("tr").appendChild(HeaderElement);
-            }
-            //contents
-            for (let i = 0; i < data.length; i++) {
-              const obj = Object.values(data[i]);
-              const rowElement = document.createElement("tr");
-              for (const cellText of obj) {
-                
-                  const cellElement = document.createElement("td");
-                  cellElement.textContent = cellText;
-                  rowElement.appendChild(cellElement);
-                
+      let generateTable = (data) =>
+        `<table class="table">
+            <thead>
+              <tr>
+                ${Object.keys(data[0])
+                  .map((headerText) => `<th>${headerText}</th>`)
+                  .join(" ")}
+              </tr>
+              </thead>
+            <tbody>
+             ${data
+               .map(
+                 (row) =>
+                   `<tr> ${Object.values(row)
+                     .map((cellText) => `<td>${cellText}</td>`)
+                     .join(" ")} </tr>`
+               )
+               .join(" ")}
+              </tbody>
+          </table>`;
+
+          let removeColumn =(data, nameOfColumn) =>{
+            return data.map(
+              row => {
+               let Row = {...row}
+               delete Row[nameOfColumn]
+               return Row
               }
-              tableBody.appendChild(rowElement);
-            }
+            )
+          }
+
+          let convertImg = (data, nameOfColumn) =>{
+            return data.map(
+              row => {
+                let Row = {...row}
+                `<img src = ${Row[nameOfColumn]}/>`
+              }
+            )
+          }
+          async function studentsDataTable(url, table) {
+            let fetchStaff = fetch("/StudentsData");
+            fetchStaff
+            .then((Details) => Details.json())
+            .then(({ data }) => {
+              data = removeColumn(data, "Password")
+              data = convertImg(data, "Passport")
+            let tableRoot = document.getElementById("tableRoot")
+            tableRoot.innerHTML = generateTable(data)
+            console.log(data[0]);
           });
       }
 
@@ -171,31 +179,9 @@
         fetchStaff
           .then((Details) => Details.json())
           .then(({ data }) => {
-            console.log(data);
-            tableHead.innerHTML = "<tr></tr>";
-            tableBody.innerHTML = "";
-            for (const headerText in data[0]) {
-              const HeaderElement = document.createElement("th");
-              HeaderElement.textContent = headerText;
-              tableHead.querySelector("tr").appendChild(HeaderElement);
-            }
-            //contents
-            for (let i = 0; i < data.length; i++) {
-              const obj = Object.values(data[i]);
-              const rowElement = document.createElement("tr");
-              for (const cellText of obj) {
-                if (typeof cellText === "object") {
-                  const cellElement = document.createElement("td");
-                  cellElement.textContent = object.values(cellText);
-                  rowElement.appendChild(cellElement);
-                } else {
-                  const cellElement = document.createElement("td");
-                  cellElement.textContent = cellText;
-                  rowElement.appendChild(cellElement);
-                }
-              }
-              tableBody.appendChild(rowElement);
-            }
+            let tableRoot = document.getElementById("tableRoot")
+            tableRoot.innerHTML = generateTable(data) 
+            console.log(data);            
           });
       }
 
@@ -207,30 +193,8 @@
           .then((Details) => Details.json())
           .then(({ rows }) => {
             console.log(rows);
-            tableHead.innerHTML = "<tr></tr>";
-            tableBody.innerHTML = "";
-            for (const headerText in rows[0]) {
-              const HeaderElement = document.createElement("th");
-              HeaderElement.textContent = headerText;
-              tableHead.querySelector("tr").appendChild(HeaderElement);
-            }
-            //contents
-            for (let i = 0; i < rows.length; i++) {
-              const obj = Object.values(rows[i]);
-              const rowElement = document.createElement("tr");
-              for (const cellText of obj) {
-                if (typeof cellText === "object") {
-                  const cellElement = document.createElement("td");
-                  cellElement.textContent = object.values(cellText);
-                  rowElement.appendChild(cellElement);
-                } else {
-                  const cellElement = document.createElement("td");
-                  cellElement.textContent = cellText;
-                  rowElement.appendChild(cellElement);
-                }
-              }
-              tableBody.appendChild(rowElement);
-            }
+            let tableRoot = document.getElementById("tableRoot")
+            tableRoot.innerHTML = generateTable(rows) 
           });
       }
 
@@ -240,28 +204,10 @@
         let fetchSt = fetch("/getClassStudents");
         fetchSt
           .then((Details) => Details.json())
-          .then(( {data }) => {
-            console.log(data);
-            tableHead.innerHTML = "<tr></tr>";
-            tableBody.innerHTML = "";
-            for (const headerText in data[0]) {
-              const HeaderElement = document.createElement("th");
-              HeaderElement.textContent = headerText;
-              tableHead.querySelector("tr").appendChild(HeaderElement);
-            }
-            //contents
-            for (let i = 0; i < data.length; i++) {
-              const obj = Object.values(data[i]);
-              const rowElement = document.createElement("tr");
-              for (const cellText of obj) {
-               
-                  const cellElement = document.createElement("td");
-                  cellElement.textContent = cellText;
-                  rowElement.appendChild(cellElement);
-                
-              }
-              tableBody.appendChild(rowElement);
-            }
+          .then(({ data }) => {
+            let tableRoot = document.getElementById("tableRoot")
+            tableRoot.innerHTML = generateTable(data) 
+            console.log(data);            
           });
       }
       document

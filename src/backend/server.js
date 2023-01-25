@@ -4,7 +4,7 @@ import db from "./createDatabase.js";
 import md5 from "md5";
 import bodyParser from "body-parser";
 import multer from "multer";
-import { send } from "process";
+import {removeColumn} from "../sharedFunctions/utils.js"
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -24,6 +24,7 @@ let port = 3000;
 app.use(express.json({ extended: false }));
 app.use("/", express.static("src/frontend"));
 app.use("/img", express.static("img"));
+app.use("/src", express.static("src"));
 app.use("/uploads", express.static("uploads"));
 
 //LOGIN SECTION-------------------------------------------------------------------------------
@@ -211,6 +212,7 @@ app.get("/staffUsers", (req, res) => {
       res.status(400).json({ error: err.message });
       return;
     }
+    rows = removeColumn(rows, "Password") 
     res.json({
       message: "success",
       data: rows,
@@ -349,8 +351,7 @@ let sql3 =`Update Students SET ${sqlUpdate.join(",")} WHERE StudentsId = ?`
 //gets all the students
 app.get("/StudentsData", (req, res) => {
   let sql = "select * from Students";
-
-  let params = [];
+  let params = [ ];
   db.all(sql, params, (err, rows) => {
     if (err) {
       res.status(400).json({ error: err.message });
@@ -639,11 +640,12 @@ app.post("/updatePassword", (req, res) =>{
     PassWord:  req.body.PassWord,
     PassWord2: req.body.PassWord2
   }
- let params =[
-   data.StudentsId,
-   md5(data.PassWord),
- ]
- if (data.PassWord == data.PassWord2){
+  console.log(data)
+  if (data.PassWord === data.PassWord2){
+   let params =[
+     data.StudentsId,
+     md5(data.PassWord),
+   ]
     
    db.all(sql, params, (err, rows) => {
     if (err) {

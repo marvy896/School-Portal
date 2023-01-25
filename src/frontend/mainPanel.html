@@ -118,8 +118,9 @@
         </section>
       </section>
     </div>
-    <script></script>
-    <script>
+ 
+    <script type="module">
+      import {removeColumn} from "/src/sharedFunctions/utils.js"
       let generateTable = (data) =>
         `<table class="table">
             <thead>
@@ -141,21 +142,13 @@
               </tbody>
           </table>`;
 
-          let removeColumn =(data, nameOfColumn) =>{
-            return data.map(
-              row => {
-               let Row = {...row}
-               delete Row[nameOfColumn]
-               return Row
-              }
-            )
-          }
 
           let convertImg = (data, nameOfColumn) =>{
             return data.map(
               row => {
-                let Row = {...row}
-                `<img src = ${Row[nameOfColumn]}/>`
+                let Row = {...row};
+                Row[nameOfColumn] = `<img src = "${Row[nameOfColumn]}" width = 100/>`
+                return Row;
               }
             )
           }
@@ -164,8 +157,8 @@
             fetchStaff
             .then((Details) => Details.json())
             .then(({ data }) => {
-              data = removeColumn(data, "Password")
-              data = convertImg(data, "Passport")
+              data = removeColumn(data, "Password");
+              data = convertImg(data, "Passport");
             let tableRoot = document.getElementById("tableRoot")
             tableRoot.innerHTML = generateTable(data)
             console.log(data[0]);
@@ -179,6 +172,7 @@
         fetchStaff
           .then((Details) => Details.json())
           .then(({ data }) => {
+              data = convertImg(data, "ImgLink");
             let tableRoot = document.getElementById("tableRoot")
             tableRoot.innerHTML = generateTable(data) 
             console.log(data);            

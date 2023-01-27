@@ -643,8 +643,8 @@ app.post("/updatePassword", (req, res) =>{
   console.log(data)
   if (data.PassWord === data.PassWord2){
    let params =[
-     data.StudentsId,
      md5(data.PassWord),
+     data.StudentsId,
    ]
     
    db.all(sql, params, (err, rows) => {
